@@ -1,0 +1,16 @@
+select distinct 
+	ac.rowId as rowId, 
+	ac.startPrice as startPrice, 
+	ac.incDecValue as incDecValue, 
+	ac.emdAmt as emdAmt,
+	case 
+			when exists(select 1 from apppayment.tbl_eventfees ef where ef.rowid=ac.rowid and ef.objectid=at.auctionid and aco.tableid=ef.tableid and ef.isactive=1 )
+			then 1
+			else 0
+		end as Selected
+	
+
+from   appauction.tbl_auctiontable at
+inner join appauction.tbl_auctioncolumn aco on aco.tableid=at.tableid 
+inner join appauction.tbl_auctioncell ace on ace.columnid=aco.columnid  
+inner join appauction.tbl_auctioncriteria ac on ac.rowid=ace.rowid  and at.auctionid=ac.auctionid and aco.columntypeid=1
