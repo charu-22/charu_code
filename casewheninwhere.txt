@@ -1,0 +1,7 @@
+SELECT * FROM dbo.CompanyMaster
+WHERE AreaId=
+(CASE WHEN EXISTS (SELECT BusinessId
+                   FROM dbo.AreaSubscription
+                   WHERE AreaSubscription.BusinessId = CompanyMaster.BusinessId) 
+      THEN @AreaId ELSE AreaId END)
+AND  AreaId IN (SELECT [@Areas].AreaId FROM @Areas)
